@@ -7,11 +7,11 @@ public class Factorial {
 	
 	private static Logger logger = Logger.getLogger(Factorial.class.getName());
 
-	public Integer factorial(Integer number) {
-		return (number == 1) ? 1 : number * factorial(number - 1);
+	public Integer factorial(Integer number, Integer result) {
+		return (number == 1) ? result : factorial(number - 1, result * number);
 	}
 
 	public static void main(String[] args) {
-		logger.log(Level.INFO, new Factorial().factorial(3).toString());
+		logger.log(Level.INFO, new Factorial().factorial(6, 1).toString());
 	}
 }
