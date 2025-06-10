@@ -16,11 +16,14 @@ public class FunctionalCircle {
 
   public final static Function<Double, Double> ference = diameter -> Math.PI * diameter;
   public final static Function<Double, Double> radius = diameter -> diameter / 2;
-  public final static Function<Double, Double> area = diameter -> Math.PI * Math.pow((radius.apply(diameter)),2);
-  
+  public final static Function<Double, Double> area = radius -> Math.PI * Math.pow(radius, 2);
+  public final static Function<Double, Double> areaFromDiameter = area.compose(radius);
+
   public final static void main(String[] args) {
-    logger.log(Level.INFO,ference.apply(3d).toString());
-    logger.log(Level.INFO,area.apply(3d).toString());
+    Double d = 3d;
+    logger.log(Level.INFO, ference.apply(d).toString());
+    logger.log(Level.INFO, area.apply(radius.apply(d)).toString());
+    logger.log(Level.INFO, areaFromDiameter.apply(d).toString());
   }
 
 }
