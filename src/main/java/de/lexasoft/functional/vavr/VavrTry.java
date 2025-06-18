@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.lexasoft.functional;
+package de.lexasoft.functional.vavr;
 
 import io.vavr.control.Try;
 
