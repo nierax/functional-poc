@@ -9,7 +9,7 @@ package de.lexasoft.functional.vavr;
 public class Address {
 
   public enum Countries {
-    GERMAN, AUSTRIA, FRANCE, SWITZERLAND, DANMARK
+    GERMANY, AUSTRIA, FRANCE, SWITZERLAND, DANMARK
   }
 
   public final String road;

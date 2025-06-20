@@ -4,10 +4,12 @@
 package de.lexasoft.functional.vavr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -18,21 +20,21 @@ import de.lexasoft.functional.vavr.Address.Countries;
 /**
  * 
  */
-class AdressValidatorTest {
+class AddressValidatorTest {
 
-  private AdressValidator cut;
+  private AddressValidator cut;
 
   /**
    * @throws java.lang.Exception
    */
   @BeforeEach
   void setUp() throws Exception {
-    cut = new AdressValidator();
+    cut = new AddressValidator();
   }
 
   /**
    * Test method for
-   * {@link de.lexasoft.functional.vavr.AdressValidator#validateRoad(java.lang.String)}.
+   * {@link de.lexasoft.functional.vavr.AddressValidator#validateRoad(java.lang.String)}.
    */
   @ParameterizedTest
   @ValueSource(strings = { "Bahnhofstr.", "Hauptstr." })
@@ -42,7 +44,7 @@ class AdressValidatorTest {
 
   /**
    * Test method for
-   * {@link de.lexasoft.functional.vavr.AdressValidator#validateRoad(java.lang.String)}.
+   * {@link de.lexasoft.functional.vavr.AddressValidator#validateRoad(java.lang.String)}.
    */
   @ParameterizedTest
   @ValueSource(strings = { "Ma!-n", "?ß+" })
@@ -52,7 +54,7 @@ class AdressValidatorTest {
 
   /**
    * Test method for
-   * {@link de.lexasoft.functional.vavr.AdressValidator#validateNr(java.lang.String)}.
+   * {@link de.lexasoft.functional.vavr.AddressValidator#validateNr(java.lang.String)}.
    */
   @ParameterizedTest
   @ValueSource(strings = { "36", "36a", "36 a", "1-5" })
@@ -62,7 +64,7 @@ class AdressValidatorTest {
 
   /**
    * Test method for
-   * {@link de.lexasoft.functional.vavr.AdressValidator#validateNr(java.lang.String)}.
+   * {@link de.lexasoft.functional.vavr.AddressValidator#validateNr(java.lang.String)}.
    */
   @ParameterizedTest
   @ValueSource(strings = { "36:a", ".-", "36@a" })
@@ -72,7 +74,7 @@ class AdressValidatorTest {
 
   /**
    * Test method for
-   * {@link de.lexasoft.functional.vavr.AdressValidator#validateZIP(java.lang.String)}.
+   * {@link de.lexasoft.functional.vavr.AddressValidator#validateZIP(java.lang.String)}.
    */
   @ParameterizedTest
   @ValueSource(strings = { "D-72202", "72202", "D14389" })
@@ -88,7 +90,7 @@ class AdressValidatorTest {
 
   /**
    * Test method for
-   * {@link de.lexasoft.functional.vavr.AdressValidator#validateCity(java.lang.String)}.
+   * {@link de.lexasoft.functional.vavr.AddressValidator#validateCity(java.lang.String)}.
    */
   @ParameterizedTest
   @ValueSource(strings = { "Stuttgart", "Kopenhagen", "Munich" })
@@ -104,7 +106,7 @@ class AdressValidatorTest {
 
   static Stream<Arguments> testValidateCountries_Valid() {
     return Stream.of(//
-        Arguments.of("GERMAN", Countries.GERMAN), //
+        Arguments.of("GERMANY", Countries.GERMANY), //
         Arguments.of("AUSTRIA", Countries.AUSTRIA), //
         Arguments.of("FRANCE", Countries.FRANCE), //
         Arguments.of("DANMARK", Countries.DANMARK), //
@@ -113,7 +115,7 @@ class AdressValidatorTest {
 
   /**
    * Test method for
-   * {@link de.lexasoft.functional.vavr.AdressValidator#validateCountries(java.lang.String)}.
+   * {@link de.lexasoft.functional.vavr.AddressValidator#validateCountries(java.lang.String)}.
    */
   @ParameterizedTest
   @MethodSource
@@ -125,7 +127,16 @@ class AdressValidatorTest {
   @ValueSource(strings = { "DEUTSCH", "FRANKREICH", "german" })
   void testValidateCountries_Invalid(String value) {
     assertEquals("ADR_COUNTRY_INVALID", cut.validateCountries(value).getError().id);
-
   }
 
+  @Test
+  void testValidateAddress_Valid() {
+    Address adr = cut.validateAddress("Mainroad", "15", "71000", "Hometown", "GERMANY").get();
+    assertNotNull(adr);
+    assertEquals("Mainroad", adr.road);
+    assertEquals("15", adr.nr);
+    assertEquals("71000", adr.zip);
+    assertEquals("Hometown", adr.city);
+    assertEquals(Countries.GERMANY, adr.country);
+  }
 }

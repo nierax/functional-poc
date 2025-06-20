@@ -6,12 +6,13 @@ package de.lexasoft.functional.vavr;
 import de.lexasoft.functional.vavr.Address.Countries;
 import de.lexasoft.functional.vavr.Violation.Severity;
 import io.vavr.collection.CharSeq;
+import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
 
 /**
  * 
  */
-public class AdressValidator {
+public class AddressValidator {
 
   private static final String VALID_ROAD_CHARS = "[a-zA-Z \\.]";
   private static final String VALID_NR_CHARS = "[0-9a-zA-Z- ]";
@@ -26,6 +27,17 @@ public class AdressValidator {
             Violation.of(id, //
                 message + " '" + seq.distinct().sorted() + "'", //
                 Severity.ERROR))); //
+  }
+
+  public Validation<Seq<Violation>, Address> validateAddress(String road, String nr, String zip, String city,
+      String country) {
+    return Validation.combine(//
+        validateRoad(road), //
+        validateNr(nr), //
+        validateZIP(zip), //
+        validateCity(city), //
+        validateCountries(country))//
+        .ap(Address::of);
   }
 
   public Validation<Violation, String> validateRoad(String road) {
