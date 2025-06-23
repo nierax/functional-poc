@@ -3,6 +3,9 @@
  */
 package de.lexasoft.functional.vavr;
 
+import static de.lexasoft.functional.vavr.Validations.allowedCharacters;
+import static de.lexasoft.functional.vavr.Validations.maxLength;
+
 import de.lexasoft.functional.vavr.Address.Countries;
 import de.lexasoft.functional.vavr.Violation.Severity;
 import io.vavr.collection.CharSeq;
@@ -49,7 +52,9 @@ public class AddressValidator {
   }
 
   public Validation<Violation, String> validateZIP(String zip) {
-    return validateAttributeValue(VALID_ZIP_CHARS, zip, "ZIP contains invalid characters: ", "ADR_ZIP_INVALID");
+    return allowedCharacters.test(zip, VALID_ZIP_CHARS) && maxLength.test(zip, 7)//
+        ? Validation.valid(zip)//
+        : Validation.invalid(Violation.of("ADR_ZIP_INVALID", "ZIP is not valid", Severity.ERROR));
   }
 
   public Validation<Violation, String> validateCity(String city) {

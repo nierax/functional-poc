@@ -83,7 +83,7 @@ class AddressValidatorTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "d-72202", ".-#", "u" })
+  @ValueSource(strings = { "d-72202", ".-#", "u", "D-72202AS" })
   void testValidateZIP_Invalid(String zip) {
     assertEquals("ADR_ZIP_INVALID", cut.validateZIP(zip).getError().id);
   }
