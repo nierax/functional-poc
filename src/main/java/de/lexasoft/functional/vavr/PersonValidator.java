@@ -16,8 +16,8 @@ public class PersonValidator {
   private static final String VALID_NAME_CHARS = "[a-zA-Z ]";
   private static final int MIN_AGE = 0;
 
-  public Validation<Seq<Violation>, Person> validatePerson(String name, int age) {
-    return Validation.combine(validateName(name), validateAge(age)).ap(Person::new);
+  public Validation<Seq<Violation>, Person> validatePerson(String name, int age, Address address) {
+    return Validation.combine(validateName(name), validateAge(age)).ap((n, a) -> new Person(n, a, address));
   }
 
   private Validation<Violation, String> validateName(String name) {
